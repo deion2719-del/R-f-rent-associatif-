@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Deion Blanche — Référent Associatif Audencia</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg-start:   #ffffff;
+      --bg-mid:     #fde8d8;
+      --bg-end:     #f9c8a8;
+      --pink-deep:  #c4612a;
+      --pink-mid:   #e09070;
+      --pink-light: #fde8d8;
+      --text-dark:  #2a1508;
+      --text-mid:   #6b3820;
+      --text-light: #a06040;
+      --white:      #ffffff;
+      --card-shadow: 0 8px 40px rgba(196, 97, 42, 0.12);
+      --card-shadow-hover: 0 20px 60px rgba(196, 97, 42, 0.22);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: radial-gradient(ellipse at 30% 20%, #fde8d8 0%, #fff8f3 40%, #ffffff 70%, #fde0c8 100%);
+      min-height: 100vh;
+      color: var(--text-dark);
+      overflow-x: hidden;
+    }
+
+    /* ── BRUIT DE TEXTURE SUBTIL ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── ORBES DÉCORATIFS ── */
+    .orb {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(80px);
+      pointer-events: none;
+      z-index: 0;
+    }
+    .orb-1 {
+      width: 500px; height: 500px;
+      background: radial-gradient(circle, rgba(224,144,112,0.25) 0%, transparent 70%);
+      top: -100px; left: -100px;
+    }
+    .orb-2 {
+      width: 400px; height: 400px;
+      background: radial-gradient(circle, rgba(196,97,42,0.15) 0%, transparent 70%);
+      bottom: -80px; right: -80px;
+    }
+    .orb-3 {
+      width: 300px; height: 300px;
+      background: radial-gradient(circle, rgba(253,224,200,0.5) 0%, transparent 70%);
+      top: 50%; left: 60%;
+    }
+
+    /* ── WRAPPER ── */
+    .wrapper {
+      position: relative;
+      z-index: 1;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 32px;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 80px 32px 60px;
+      position: relative;
+    }
+
+    .hero-eyebrow {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--pink-deep);
+      margin-bottom: 24px;
+      opacity: 0;
+      animation: fadeUp 0.8s ease 0.2s forwards;
+    }
+
+    .hero-name {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(52px, 9vw, 110px);
+      font-weight: 900;
+      line-height: 0.95;
+      letter-spacing: -0.02em;
+      color: var(--text-dark);
+      margin-bottom: 28px;
+      opacity: 0;
+      animation: fadeUp 0.9s ease 0.4s forwards;
+    }
+
+    .hero-name span {
+      display: block;
+      font-style: italic;
+      color: var(--pink-deep);
+    }
+
+    .hero-desc {
+      font-size: clamp(15px, 2vw, 18px);
+      font-weight: 300;
+      color: var(--text-mid);
+      max-width: 560px;
+      line-height: 1.75;
+      margin-bottom: 56px;
+      opacity: 0;
+      animation: fadeUp 1s ease 0.6s forwards;
+    }
+
+    .hero-hint {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-light);
+      letter-spacing: 0.05em;
+      opacity: 0;
+      animation: fadeUp 1s ease 0.9s forwards;
+    }
+
+    .hero-hint-line {
+      width: 40px;
+      height: 1px;
+      background: var(--pink-mid);
+    }
+
+    .scroll-cta {
+      position: absolute;
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      color: var(--text-light);
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      opacity: 0;
+      animation: fadeUp 1s ease 1.2s forwards;
+    }
+
+    .scroll-arrow {
+      width: 1px;
+      height: 40px;
+      background: linear-gradient(to bottom, var(--pink-mid), transparent);
+      animation: scrollPulse 1.8s ease infinite;
+    }
+
+    /* ── SECTION CARTES ── */
+    .cards-section {
+      padding: 80px 32px 120px;
+    }
+
+    .section-label {
+      text-align: center;
+      margin-bottom: 64px;
+    }
+
+    .section-label h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(28px, 4vw, 42px);
+      font-weight: 700;
+      color: var(--text-dark);
+      margin-bottom: 12px;
+    }
+
+    .section-label p {
+      font-size: 15px;
+      color: var(--text-light);
+      font-weight: 300;
+    }
+
+    /* ── GRILLE 2×2 ── */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 28px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    /* ── CARTE FLIP ── */
+    .card-wrap {
+      perspective: 1200px;
+      height: 420px;
+      cursor: pointer;
+    }
+
+    .card-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transform-style: preserve-3d;
+      transition: transform 0.75s cubic-bezier(0.4, 0.2, 0.2, 1);
+    }
+
+    .card-wrap.flipped .card-inner {
+      transform: rotateY(180deg);
+    }
+
+    .card-face {
+      position: absolute;
+      inset: 0;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+      border-radius: 24px;
+      overflow: hidden;
+    }
+
+    /* FACE AVANT */
+    .card-front {
+      background: rgba(255, 255, 255, 0.75);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(214, 58, 110, 0.12);
+      box-shadow: var(--card-shadow);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 36px 32px;
+      transition: box-shadow 0.3s ease, transform 0.3s ease;
+    }
+
+    .card-wrap:hover .card-front {
+      box-shadow: var(--card-shadow-hover);
+      transform: translateY(-4px);
+    }
+
+    .card-wrap.flipped:hover .card-front {
+      transform: none;
+    }
+
+    .card-number {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      color: var(--pink-deep);
+      text-transform: uppercase;
+    }
+
+    .card-category {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(34px, 4.5vw, 52px);
+      font-weight: 900;
+      color: var(--text-dark);
+      line-height: 1;
+      letter-spacing: -0.02em;
+    }
+
+    .card-front-bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .card-tap-hint {
+      font-size: 12px;
+      color: var(--text-light);
+      letter-spacing: 0.08em;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .card-tap-hint svg {
+      width: 16px;
+      height: 16px;
+      opacity: 0.5;
+    }
+
+    .card-deco {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--bg-end), var(--pink-mid));
+      opacity: 0.5;
+    }
+
+    /* FACE ARRIÈRE */
+    .card-back {
+      background: linear-gradient(145deg, #fff5ee, #fde8d8);
+      border: 1px solid rgba(214, 58, 110, 0.15);
+      box-shadow: var(--card-shadow);
+      transform: rotateY(180deg);
+      display: flex;
+      flex-direction: column;
+      padding: 32px;
+      gap: 16px;
+      overflow-y: auto;
+    }
+
+    .card-back::-webkit-scrollbar { width: 4px; }
+    .card-back::-webkit-scrollbar-thumb { background: var(--pink-mid); border-radius: 2px; }
+
+    .card-back-tag {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.22em;
+      color: var(--pink-deep);
+      text-transform: uppercase;
+    }
+
+    .card-word {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(22px, 3vw, 32px);
+      font-weight: 900;
+      color: var(--text-dark);
+      line-height: 1.1;
+      letter-spacing: -0.01em;
+    }
+
+    .card-divider {
+      width: 36px;
+      height: 2px;
+      background: linear-gradient(to right, var(--pink-deep), var(--pink-mid));
+      border-radius: 2px;
+    }
+
+    .card-story {
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--text-mid);
+      line-height: 1.75;
+      flex: 1;
+    }
+
+    /* ── TEXT REVEAL ANIMATION ── */
+    .reveal-word {
+      display: inline;
+      opacity: 0;
+      filter: blur(6px);
+      transform: translateY(8px);
+      transition: opacity 0.45s ease, filter 0.45s ease, transform 0.45s ease;
+    }
+
+    .reveal-word.visible {
+      opacity: 1;
+      filter: blur(0);
+      transform: translateY(0);
+    }
+
+    /* ── CLOSE BUTTON ── */
+    .card-close {
+      align-self: flex-end;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      border: 1px solid rgba(214, 58, 110, 0.25);
+      background: rgba(255,255,255,0.6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background 0.2s;
+      flex-shrink: 0;
+      margin-top: auto;
+    }
+
+    .card-close:hover { background: rgba(214,58,110,0.1); }
+
+    .card-close svg {
+      width: 14px;
+      height: 14px;
+      color: var(--pink-deep);
+    }
+
+    /* ── CONCLUSION ── */
+    .conclusion-section {
+      padding: 60px 32px 100px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .conclusion-inner {
+      max-width: 720px;
+      margin: 0 auto;
+      text-align: center;
+      background: rgba(255,255,255,0.6);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(196, 97, 42, 0.12);
+      border-radius: 28px;
+      padding: 56px 60px;
+      box-shadow: 0 12px 50px rgba(196, 97, 42, 0.10);
+    }
+
+    .conclusion-eyebrow {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--pink-deep);
+      margin-bottom: 20px;
+    }
+
+    .conclusion-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(26px, 3.5vw, 40px);
+      font-weight: 900;
+      color: var(--text-dark);
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      margin-bottom: 28px;
+    }
+
+    .conclusion-title em {
+      color: var(--pink-deep);
+      font-style: italic;
+    }
+
+    .conclusion-text {
+      font-size: 15px;
+      font-weight: 400;
+      color: var(--text-mid);
+      line-height: 1.85;
+      margin-bottom: 40px;
+    }
+
+    .conclusion-signature {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      font-size: 13px;
+      color: var(--text-light);
+    }
+
+    .sig-name {
+      font-weight: 600;
+      color: var(--pink-deep);
+      letter-spacing: 0.04em;
+    }
+
+    .sig-dot { opacity: 0.4; }
+
+    /* ── FOOTER ── */
+    footer {
+      text-align: center;
+      padding: 40px 32px 60px;
+      font-size: 12px;
+      color: var(--text-light);
+      letter-spacing: 0.05em;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes scrollPulse {
+      0%, 100% { opacity: 0.3; }
+      50%       { opacity: 1; }
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 640px) {
+      .cards-grid {
+        grid-template-columns: 1fr;
+      }
+      .card-wrap { height: 380px; }
+      .hero-name { font-size: clamp(42px, 14vw, 80px); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Orbes décoratifs -->
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+
+  <!-- ── HERO ── -->
+  <section class="hero">
+    <div class="wrapper" style="display:flex;flex-direction:column;align-items:center;text-align:center;">
+      <p class="hero-eyebrow">Candidature · Référent Associatif Audencia</p>
+      <h1 class="hero-name">
+        Deion
+        <span>Blanche</span>
+      </h1>
+      <p class="hero-desc">
+        Paris 14e, Montrouge, Meaux, et maintenant Nantes.<br>
+        Basket, théâtre, musique, entrepreneuriat.<br>
+        Quatre cartes pour voir qui je suis vraiment.
+      </p>
+      <div class="hero-hint">
+        <span class="hero-hint-line"></span>
+        Retournez une carte pour découvrir une facette de ma personnalité
+        <span class="hero-hint-line"></span>
+      </div>
+    </div>
+    <div class="scroll-cta">
+      <span>Explorer</span>
+      <div class="scroll-arrow"></div>
+    </div>
+  </section>
+
+  <!-- ── CARTES ── -->
+  <section class="cards-section">
+    <div class="wrapper">
+      <div class="section-label">
+        <h2>Mes quatre facettes</h2>
+        <p>Cliquez sur une carte pour la retourner</p>
+      </div>
+
+      <div class="cards-grid">
+
+        <!-- CARTE 1 : Prisme → Audace -->
+        <div class="card-wrap" id="card-1" onclick="flipCard('card-1')">
+          <div class="card-inner">
+            <div class="card-face card-front">
+              <div class="card-number">01 · Prisme</div>
+              <div class="card-category">Prisme</div>
+              <div class="card-front-bottom">
+                <div class="card-tap-hint">
+                  <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.042 21.672L13.684 16.6m0 0l-2.51 2.225.569-9.47 5.227 7.917-3.286-.672zm-7.518-.267A8.25 8.25 0 1120.25 10.5M8.288 14.212A5.25 5.25 0 1117.25 10.5"/>
+                  </svg>
+                  Retourner
+                </div>
+                <div class="card-deco"></div>
+              </div>
+            </div>
+            <div class="card-face card-back">
+              <div class="card-back-tag">01 · Prisme</div>
+              <div class="card-word" id="word-1">Audace</div>
+              <div class="card-divider"></div>
+              <div class="card-story" id="story-1">
+                À 8 ans je commençais le basket, à 16 ans le football américain, entre les deux j'ai fait quatre ans de théâtre et joué chaque fin d'année au Théâtre de la Bastille. Pas parce qu'on me l'avait proposé, mais parce que j'allais chercher. Aujourd'hui c'est pareil : quand une porte est fermée, je cherche une porte dérobée. Quand la porte dérobée est fermée, je trouve toujours une fenêtre ouverte quelque part. C'est cette façon de fonctionner qui fait que les projets que je lance finissent par aboutir, toujours.
+              </div>
+              <button class="card-close" onclick="closeCard(event, 'card-1')" aria-label="Refermer">
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- CARTE 2 : Impulsion → Améliorer -->
+        <div class="card-wrap" id="card-2" onclick="flipCard('card-2')">
+          <div class="card-inner">
+            <div class="card-face card-front">
+              <div class="card-number">02 · Impulsion</div>
+              <div class="card-category">Impulsion</div>
+              <div class="card-front-bottom">
+                <div class="card-tap-hint">
+                  <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.042 21.672L13.684 16.6m0 0l-2.51 2.225.569-9.47 5.227 7.917-3.286-.672zm-7.518-.267A8.25 8.25 0 1120.25 10.5M8.288 14.212A5.25 5.25 0 1117.25 10.5"/>
+                  </svg>
+                  Retourner
+                </div>
+                <div class="card-deco"></div>
+              </div>
+            </div>
+            <div class="card-face card-back">
+              <div class="card-back-tag">02 · Impulsion</div>
+              <div class="card-word" id="word-2">Améliorer</div>
+              <div class="card-divider"></div>
+              <div class="card-story" id="story-2">
+                Quand je suis arrivé à Audencia, j'ai pris une vraie claque, dans le bon sens. À Paris, on évolue souvent dans une bulle, entouré de gens qui ont grandi dans les mêmes rues, avec les mêmes références. Ici, c'est autre chose. Des gens de partout, des façons de penser que je n'avais jamais croisées, et ça m'a forcé à me remettre en question sur pas mal de choses. Certaines personnes que j'ai rencontrées sont bien meilleures que moi sur certains points, et j'ai eu l'intelligence de m'en inspirer plutôt que de faire comme si ça ne me concernait pas. C'est ça qui me différencie : je suis capable de reconnaître ce que je ne sais pas encore faire, et de m'améliorer vite. En asso, c'est une qualité rare.
+              </div>
+              <button class="card-close" onclick="closeCard(event, 'card-2')" aria-label="Refermer">
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- CARTE 3 : Maillage → Recours aux énergies renouvelables -->
+        <div class="card-wrap" id="card-3" onclick="flipCard('card-3')">
+          <div class="card-inner">
+            <div class="card-face card-front">
+              <div class="card-number">03 · Maillage</div>
+              <div class="card-category">Maillage</div>
+              <div class="card-front-bottom">
+                <div class="card-tap-hint">
+                  <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.042 21.672L13.684 16.6m0 0l-2.51 2.225.569-9.47 5.227 7.917-3.286-.672zm-7.518-.267A8.25 8.25 0 1120.25 10.5M8.288 14.212A5.25 5.25 0 1117.25 10.5"/>
+                  </svg>
+                  Retourner
+                </div>
+                <div class="card-deco"></div>
+              </div>
+            </div>
+            <div class="card-face card-back">
+              <div class="card-back-tag">03 · Maillage</div>
+              <div class="card-word" id="word-3">Entrepreneuriat</div>
+              <div class="card-divider"></div>
+              <div class="card-story" id="story-3">
+                Quand je suis arrivé à Nantes, j'avais déjà une idée en tête. Avec un ami, on a lancé une conciergerie Airbnb. Pas pour le côté glamour, juste parce qu'on a vu une opportunité et qu'on l'a saisie. Aujourd'hui, c'est une dizaine d'appartements, un associé, et une organisation qu'on a entièrement déléguée parce qu'à un moment, ça demande trop de temps si on ne structure pas. Je vis en partie de ça. Ce que j'ai appris, c'est que construire quelque chose de réel demande de savoir s'organiser, faire confiance aux bonnes personnes, et ne jamais se laisser déborder. C'est exactement les mêmes réflexes que j'apporte dans une association.
+              </div>
+              <button class="card-close" onclick="closeCard(event, 'card-3')" aria-label="Refermer">
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- CARTE 4 : Étincelle → Défaite victorieuse -->
+        <div class="card-wrap" id="card-4" onclick="flipCard('card-4')">
+          <div class="card-inner">
+            <div class="card-face card-front">
+              <div class="card-number">04 · Étincelle</div>
+              <div class="card-category">Étincelle</div>
+              <div class="card-front-bottom">
+                <div class="card-tap-hint">
+                  <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.042 21.672L13.684 16.6m0 0l-2.51 2.225.569-9.47 5.227 7.917-3.286-.672zm-7.518-.267A8.25 8.25 0 1120.25 10.5M8.288 14.212A5.25 5.25 0 1117.25 10.5"/>
+                  </svg>
+                  Retourner
+                </div>
+                <div class="card-deco"></div>
+              </div>
+            </div>
+            <div class="card-face card-back">
+              <div class="card-back-tag">04 · Étincelle</div>
+              <div class="card-word" id="word-4">Défaite<br>victorieuse</div>
+              <div class="card-divider"></div>
+              <div class="card-story" id="story-4">
+                Pour la première édition de l'Odience Live Session, j'ai eu l'occasion d'échanger avec Jean Morel, un grand nom de la musique urbaine française. Pour vous donner une idée du niveau, c'est un peu comme si vous faisiez Sciences Po et que vous réussissiez à décrocher une vraie conversation avec Sébastien Lecornu. Deux jours d'échanges, un projet pitché, et au final il n'a pas pu nous rejoindre. Sur le papier c'est un échec. Mais moi je l'ai vécu comme une validation. J'avais réussi à atteindre quelqu'un de ce calibre juste parce que j'avais osé aller chercher les gens autour de lui, et que le projet avait du sens. Ce genre de "non", il ne m'arrête jamais. Il me donne juste envie de revenir plus fort.
+              </div>
+              <button class="card-close" onclick="closeCard(event, 'card-4')" aria-label="Refermer">
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CONCLUSION ── -->
+  <section class="conclusion-section">
+    <div class="wrapper">
+      <div class="conclusion-inner">
+        <p class="conclusion-eyebrow">Pourquoi moi ?</p>
+        <h2 class="conclusion-title">Un profil qui sort du lot,<br><em>et qui le sait.</em></h2>
+        <p class="conclusion-text">
+          Beaucoup de candidats ont de bonnes intentions. Ce qui me différencie, c'est que j'ai déjà prouvé que je sais transformer une idée en quelque chose de concret. Président de L'Odience, j'anime au quotidien une association que vous connaissez, je fédère des gens autour de projets qui comptent, et je gère les imprévus sans perdre le fil. En parallèle, j'ai lancé un business depuis Nantes qui tourne aujourd'hui sur une dizaine d'appartements. Je ne demande pas à être référent associatif pour ajouter une ligne sur un CV. Je le demande parce que je sais ce que c'est que d'animer un collectif, de porter un projet sous pression, et de tenir quand ça ne va pas comme prévu. Ce poste, je suis prêt à l'incarner pleinement, avec l'énergie, la rigueur et le réseau que j'ai mis des années à construire.
+        </p>
+        <div class="conclusion-signature">
+          <span class="sig-name">Deion Blanche</span>
+          <span class="sig-dot">·</span>
+          <span class="sig-role">Candidat Référent Associatif Audencia 2026</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <p>Deion Blanche &nbsp;·&nbsp; Candidature Référent Associatif &nbsp;·&nbsp; Audencia 2026</p>
+  </footer>
+
+  <script>
+    const flipped = {};
+
+    function wrapWords(el) {
+      if (el.dataset.wrapped) return;
+      el.dataset.wrapped = 'true';
+
+      function processNode(node) {
+        if (node.nodeType === Node.TEXT_NODE) {
+          const words = node.textContent.split(/(\s+)/);
+          const frag = document.createDocumentFragment();
+          words.forEach(part => {
+            if (/^\s+$/.test(part)) {
+              frag.appendChild(document.createTextNode(part));
+            } else if (part) {
+              const span = document.createElement('span');
+              span.className = 'reveal-word';
+              span.textContent = part;
+              frag.appendChild(span);
+            }
+          });
+          node.parentNode.replaceChild(frag, node);
+        } else if (node.nodeType === Node.ELEMENT_NODE && node.tagName !== 'BUTTON') {
+          Array.from(node.childNodes).forEach(processNode);
+        }
+      }
+      processNode(el);
+    }
+
+    function triggerReveal(storyEl, wordEl) {
+      wrapWords(storyEl);
+      wrapWords(wordEl);
+
+      const allSpans = [
+        ...wordEl.querySelectorAll('.reveal-word'),
+        ...storyEl.querySelectorAll('.reveal-word')
+      ];
+
+      allSpans.forEach(s => s.classList.remove('visible'));
+
+      allSpans.forEach((span, i) => {
+        setTimeout(() => span.classList.add('visible'), 60 + i * 38);
+      });
+    }
+
+    function flipCard(id) {
+      const card = document.getElementById(id);
+      if (card.classList.contains('flipped')) return;
+
+      card.classList.add('flipped');
+
+      const num = id.split('-')[1];
+      const storyEl = document.getElementById('story-' + num);
+      const wordEl  = document.getElementById('word-'  + num);
+
+      setTimeout(() => triggerReveal(storyEl, wordEl), 420);
+    }
+
+    function closeCard(e, id) {
+      e.stopPropagation();
+      const card = document.getElementById(id);
+      card.classList.remove('flipped');
+    }
+  </script>
+</body>
+</html>
